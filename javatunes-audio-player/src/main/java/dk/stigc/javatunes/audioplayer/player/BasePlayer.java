@@ -193,9 +193,7 @@ abstract public class BasePlayer extends Thread
 			if (hook != null)				
 				hook.audioInterrupted(audio);
 		}
-	}  
-		
-
+	}
 	
   	protected void initAudioLine(int channels, int rate, int bps, boolean signed, boolean bigEndian) throws LineUnavailableException
   	{

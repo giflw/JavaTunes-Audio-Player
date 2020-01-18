@@ -182,16 +182,15 @@ public class Tests
 	}
 	
 	@Test
-	@Ignore
 	public void twoAudioPlayers() throws Exception
 	{
 		AudioPlayer ap1 = new AudioPlayer();
-		ap1.play(root + "AAC\\03 Down The Nightclub.m4a");
+		ap1.play(resourceToFilePath("/test.m4a"));
 		
 		AudioPlayer ap2 = new AudioPlayer();
-		ap2.play(root + "AAC\\dr.aac");
+		ap2.play(resourceToFilePath("/test.aac"));
 		
-		Thread.sleep(5000);
+		Thread.sleep(3000);
 		
 		ap1.stop();
 		ap2.stop();

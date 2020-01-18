@@ -150,10 +150,9 @@ public class Tests
 	}
 	
 	@Test
-	@Ignore
 	public void vorbisWillPlay() throws Exception
 	{
-		playFor2Seconds(root + "Vorbis\\Abba-Chiquitta.ogg");
+		playFor2Seconds(new File(this.getClass().getResource("/test.ogg").toURI()).getAbsolutePath());
 	}
 	
 	@Test

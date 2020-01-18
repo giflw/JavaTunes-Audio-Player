@@ -15,12 +15,11 @@ public class OggPlayer extends BasePlayer
   StreamState os;
   Page og;
   Packet op;
-  Info vi;
+  OggInfo vi;
   Comment vc;
   DspState vd;
   Block vb;
-
- 
+   
   //private double gain = 1;
   //private long timer = 0;
   //private boolean paused = false;
@@ -50,7 +49,7 @@ public class OggPlayer extends BasePlayer
     os=new StreamState();
     og=new Page();
     op=new Packet();
-    vi=new Info();
+    vi=new OggInfo();
     vc=new Comment();
     vd=new DspState();
     vb=new Block(vd);
@@ -157,15 +156,17 @@ public class OggPlayer extends BasePlayer
 
       float[][][] _pcmf=new float[1][][];
       int[] _index=new int[vi.channels];
+      
+      int bitrate_nominal = vi.getNominalBitrate();
 
 	  int lengthInSeconds = 0;
 	  if (granules > 0) 
 		  lengthInSeconds = granules / vi.rate;
 	  else if (lengthInBytes > 0)
-		  lengthInSeconds = (int)(lengthInBytes * 8 / vi.bitrate_nominal);
+		  lengthInSeconds = (int)(lengthInBytes * 8 / bitrate_nominal);
 	  
 	  if (audioInfo.setLengthInSeconds(lengthInSeconds) == false)
-		  audioInfo.setKbps(vi.bitrate_nominal/1000);
+		  audioInfo.setKbps(bitrate_nominal/1000);
 
 	  initAudioLine(vi.channels, vi.rate, 16, true, false);
       	    

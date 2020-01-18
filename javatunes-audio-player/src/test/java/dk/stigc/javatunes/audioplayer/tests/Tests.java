@@ -97,6 +97,7 @@ public class Tests
 	}
 	
 	@Test
+	@Ignore
 	public void whenPlayingEventsIsFired() throws Exception
 	{
 		Track track = new Track();
@@ -142,36 +143,42 @@ public class Tests
 	}
 	
 	@Test
+	@Ignore
 	public void alacWillPlay() throws Exception
 	{
-		playFor5Seconds(root + "ALAC\\08 Lilac.m4a");
+		playFor2Seconds(root + "ALAC\\08 Lilac.m4a");
 	}
 	
 	@Test
+	@Ignore
 	public void vorbisWillPlay() throws Exception
 	{
-		playFor5Seconds(root + "Vorbis\\Abba-Chiquitta.ogg");
+		playFor2Seconds(root + "Vorbis\\Abba-Chiquitta.ogg");
 	}
 	
 	@Test
+	@Ignore
 	public void flacWillPlay() throws Exception
 	{
-		playFor5Seconds(root + "FLAC\\07 Det är en nåd.flac");
+		playFor2Seconds(root + "FLAC\\07 Det ï¿½r en nï¿½d.flac");
 	}
 	
 	@Test
+	@Ignore
 	public void wavPackWillPlay() throws Exception
 	{
-		playFor5Seconds(root + "WavPack\\Track01.wv");
+		playFor2Seconds(root + "WavPack\\Track01.wv");
 	}
 	
 	@Test
+	@Ignore
 	public void aacAdtsWillPlay() throws Exception
 	{
-		playFor5Seconds(root + "AAC\\dr.aac");
+		playFor2Seconds(root + "AAC\\dr.aac");
 	}
 	
 	@Test
+	@Ignore
 	public void twoAudioPlayers() throws Exception
 	{
 		AudioPlayer ap1 = new AudioPlayer();
@@ -187,47 +194,53 @@ public class Tests
 	}
 
 	@Test
+	@Ignore
 	public void aac2() throws Exception
 	{
-		playFor5Seconds(root + "AAC\\SBR 02 Loca (feat. Dizzee Rascal).m4a");
+		playFor2Seconds(root + "AAC\\SBR 02 Loca (feat. Dizzee Rascal).m4a");
 	}
 	
 	@Test
+	@Ignore
 	public void aacWithLcWillPlay() throws Exception
 	{
-		playFor5Seconds(root + "AAC\\03 Down The Nightclub.m4a");
+		playFor2Seconds(root + "AAC\\03 Down The Nightclub.m4a");
 	}
 	
 	@Test
+	@Ignore
 	public void aacWithSbrWillWork1() throws Exception
 	{
-		playFor5Seconds(root + "AAC\\SBR 06 One In A Million.m4a");
+		playFor2Seconds(root + "AAC\\SBR 06 One In A Million.m4a");
 	}
 
 	@Test
 	public void aacWithSbrWillWork2() throws Exception
 	{
-		playFor5Seconds("http://51.254.29.40:80/stream3");
+		playFor2Seconds("http://51.254.29.40:80/stream3");
 	}
 	
 	@Test
+	@Ignore
 	public void opusShoutcastWillWork() throws Exception
 	{
-		playFor5Seconds("http://dir.xiph.org/listen/3485207/listen.m3u");
+		playFor2Seconds("http://dir.xiph.org/listen/3485207/listen.m3u");
 	}
 	
 	@Test
+	@Ignore
 	public void opusWillWork() throws Exception
 	{
-		playFor5Seconds(root + "opus\\11025.opus");
-		playFor5Seconds(root + "opus\\11025-mono.opus");
-		playFor5Seconds(root + "opus\\22500.opus");
-		playFor5Seconds(root + "opus\\22500-mono.opus");
-		playFor5Seconds(root + "opus\\44100.opus");
-		playFor5Seconds(root + "opus\\44100-mono.opus");
+		playFor2Seconds(root + "opus\\11025.opus");
+		playFor2Seconds(root + "opus\\11025-mono.opus");
+		playFor2Seconds(root + "opus\\22500.opus");
+		playFor2Seconds(root + "opus\\22500-mono.opus");
+		playFor2Seconds(root + "opus\\44100.opus");
+		playFor2Seconds(root + "opus\\44100-mono.opus");
 	}
 	
 	@Test
+	@Ignore
 	public void gaplessPlaybackWillWork() throws Exception
 	{
 		TestPlayer player = new TestPlayer();
@@ -244,15 +257,16 @@ public class Tests
 	}
 	
 	@Test
+	@Ignore
 	public void playFlacFileWithMultipleAndEmptyStreamInfos() throws Exception
 	{
-		playFor5Seconds(root + "flac\\tidal1.flac");
+		playFor2Seconds(root + "flac\\tidal1.flac");
 	}
 
 	@Test		
     public void playHlsStream() throws Exception
 	{
-		playForXSeconds(30, "http://drradio1-lh.akamaihd.net/i/p1_9@143503/index_256_a-p.m3u8?sd=10&rebase=on");
+		playForXSeconds(3, "http://drradio1-lh.akamaihd.net/i/p1_9@143503/index_256_a-p.m3u8?sd=10&rebase=on");
 	}
 	
 	@Test
@@ -269,85 +283,60 @@ public class Tests
 			seconds++;
 			Thread.sleep(1000);
 			player.printInfo();
-			if (seconds % 10 == 0)
+			if (seconds % 2 == 0)
 				player.playNextTrack();
+			if (seconds % 6 == 0)
+				break;
 		}
 		
 		player.stop();
 	}
 	
-	public static String execCmd(String[] cmds) throws java.io.IOException {
-	    java.util.Scanner s = new java.util.Scanner(
-	    		Runtime.getRuntime().exec(cmds).getInputStream())
-	    		.useDelimiter("\\A");
-	    return s.hasNext() ? s.next() : "";
-	}
-	
-	public void testingYoutube() throws Exception
-	{
-		String[] cmds = new String[]{
-				"C:\\Users\\Stig\\Desktop\\youtube-dl.exe"
-				, "--cookies"
-				, "cookies.txt"
-				, "--get-url"
-				, "https://www.youtube.com/watch?v=kJQP7kiw5Fk"
-		};
-		
-		String result = execCmd(cmds);
-		System.out.println(result);
-		
-		String lines[] = result.split("\\r?\\n");
-		if (lines[1].indexOf("https://")==0 || lines[1].indexOf("http://")==0)
-		{
-			AudioPlayer player = new AudioPlayer();
-			player.play(lines[1]);
-			while (player.isPlaying())
-			{
-				Common.sleep(1000);	
-				write(" * " + player.getAudioInfo().toString());
-			}
-		}
-	}
-	
 	@Test
+	@Ignore
 	public void globalReplayGain() throws Exception
 	{
 		BasePlayer.setGlobalRpgain(-20);
-		playFor5Seconds(root + "AAC\\03 Down The Nightclub.m4a");
+		playFor2Seconds(root + "AAC\\03 Down The Nightclub.m4a");
 		
 		BasePlayer.setGlobalRpgain(5);
-		playFor5Seconds(root + "AAC\\03 Down The Nightclub.m4a");
+		playFor2Seconds(root + "AAC\\03 Down The Nightclub.m4a");
 		
 		BasePlayer.setGlobalRpgain(0);
-		playFor5Seconds(root + "AAC\\03 Down The Nightclub.m4a");
+		playFor2Seconds(root + "AAC\\03 Down The Nightclub.m4a");
 	}
 
 	@Test
+	@Ignore
 	public void mp3WillPlay() throws Exception
 	{
-		playFor5Seconds(root + "MP3\\id3v2.4 UTF-8 Nanna.mp3");
+		playFor2Seconds(root + "MP3\\id3v2.4 UTF-8 Nanna.mp3");
 
 	}
 
 	@Test
+	@Ignore
 	public void ertyert() throws Exception
 	{
-		playFor5Seconds("C:\\Users\\Stig\\Desktop\\failed.mp4");
+		playFor2Seconds("C:\\Users\\Stig\\Desktop\\failed.mp4");
 	}
 	
 	@Test
+	@Ignore
 	public void bps24WillWork() throws Exception
 	{
-		playFor5Seconds(root + "FLAC\\24bps-96khz.01 999,999.flac");
+		playFor2Seconds(root + "FLAC\\24bps-96khz.01 999,999.flac");
 	}
 	
 	@Test
+	@Ignore
 	public void bps8WillWork() throws Exception
 	{
-		playFor5Seconds(root + "WavPack\\8bit.wv");
+		playFor2Seconds(root + "WavPack\\8bit.wv");
 	}
 	
 	@Test
+	@Ignore
 	public void tracksCanBeChanged() throws Exception
 	{
 		AudioPlayer audioPlayer = new AudioPlayer();
@@ -400,12 +389,13 @@ public class Tests
 	@Test
 	public void tagReadingRemonteWillWork() throws Exception
 	{
-		playFor5Seconds("http://stigc.dk/audiofiles/1.ogg");
-		playFor5Seconds("http://stigc.dk/audiofiles/2.opus");
-		playFor5Seconds("http://stigc.dk/audiofiles/3.flac");
+		playFor2Seconds("http://stigc.dk/audiofiles/1.ogg");
+		playFor2Seconds("http://stigc.dk/audiofiles/2.opus");
+		playFor2Seconds("http://stigc.dk/audiofiles/3.flac");
 	}
 	
 	@Test
+	@Ignore
 	public void pauseShouldWork() throws Exception
 	{
 		String path = root + "MP3\\id3v2.4 UTF-8 Nanna.mp3";
@@ -438,6 +428,7 @@ public class Tests
 	}
 
 	@Test
+	@Ignore
 	public void pauseShouldWork2() throws Exception
 	{
 		String path = root + "MP3\\id3v2.4 UTF-8 Nanna.mp3";
@@ -489,9 +480,9 @@ public class Tests
 		playForXSeconds(path, null, seconds);
 	}
 	
-	private void playFor5Seconds(String path) throws Exception
+	private void playFor2Seconds(String path) throws Exception
 	{
-		playForXSeconds(path, null, 5);
+		playForXSeconds(path, null, 2);
 	}
 	
 	private void playForXSeconds(String path, Track track, int seconds) throws Exception

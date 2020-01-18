@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import dk.stigc.javatunes.audioplayer.other.Log;
@@ -17,6 +17,7 @@ public class TagTests
 	String root = "C:\\data\\Projekter\\Eclipse.workspace\\JavaTunes\\other\\Test audio files\\";
 
 	@Test
+	@Ignore
 	public void id3v22Tags() throws Exception
 	{
 		File file = new File(root + "MP3\\01 Steady As She Goes.id3v2.2.mp3");
@@ -28,6 +29,7 @@ public class TagTests
 
 	}
 	@Test
+	@Ignore
 	public void quicktimeAacTags() throws FileNotFoundException
 	{
 		String path = root + "AAC\\03 Down The Nightclub.m4a";
@@ -40,6 +42,7 @@ public class TagTests
 	}
 	
 	@Test
+	@Ignore
 	public void oggOpusComments() throws Exception
 	{
 		File file = new File(root + "opus\\04 - Within.opus");
@@ -50,6 +53,7 @@ public class TagTests
 	}	
 	
 	@Test
+	@Ignore
 	public void oggVorbisComments() throws Exception
 	{
 		File file = new File(root + "Vorbis\\Abba-Chiquitta.ogg");
@@ -61,6 +65,7 @@ public class TagTests
 	}	
 	
 	@Test
+	@Ignore
 	public void trackNumberTesting() throws Exception
 	{
 		File file = new File("f:\\musik\\blandet 3\\01 - abigail mead, nigel goulding - full metal jacket.mp3");
@@ -69,6 +74,7 @@ public class TagTests
 	}	
 	
 	@Test
+	@Ignore
 	public void trackNumberTestign2() throws Exception
 	{
 		File file = new File("f:\\musik\\brandi carlile\\the story\\01 - late morning lullaby.mp3");

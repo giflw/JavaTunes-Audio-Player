@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 
 import dk.stigc.javatunes.audioplayer.other.AbstractTrack;
 import dk.stigc.javatunes.audioplayer.player.AudioInfo;
-import dk.stigc.javatunes.audioplayer.player.AudioInfoInternal;
 import dk.stigc.javatunes.audioplayer.player.AudioPlayer;
 import dk.stigc.javatunes.audioplayer.player.IAudio;
 import dk.stigc.javatunes.audioplayer.player.IAudioPlayerHook;

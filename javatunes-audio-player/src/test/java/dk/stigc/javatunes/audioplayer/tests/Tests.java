@@ -3,9 +3,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
@@ -15,6 +17,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.Line;
 import javax.sound.sampled.Mixer;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -28,6 +31,10 @@ import dk.stigc.javatunes.audioplayer.tagreader.TagReaderManager;
 public class Tests
 {
 	String root = "C:\\data\\Projekter\\Eclipse.workspace\\JavaTunes\\other\\Test audio files\\";
+		
+	public String resourceToFilePath(String resource) throws URISyntaxException {
+		return new File(this.getClass().getResource(resource).toURI()).getAbsolutePath();
+	}
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception 
@@ -143,23 +150,21 @@ public class Tests
 	}
 	
 	@Test
-	@Ignore
 	public void alacWillPlay() throws Exception
 	{
-		playFor2Seconds(root + "ALAC\\08 Lilac.m4a");
+		playFor2Seconds(resourceToFilePath("/test.m4a"));
 	}
 	
 	@Test
 	public void vorbisWillPlay() throws Exception
 	{
-		playFor2Seconds(new File(this.getClass().getResource("/test.ogg").toURI()).getAbsolutePath());
+		playFor2Seconds(resourceToFilePath("/test.ogg"));
 	}
 	
 	@Test
-	@Ignore
 	public void flacWillPlay() throws Exception
 	{
-		playFor2Seconds(root + "FLAC\\07 Det �r en n�d.flac");
+		playFor2Seconds(resourceToFilePath("/test.flac"));
 	}
 	
 	@Test
@@ -200,10 +205,9 @@ public class Tests
 	}
 	
 	@Test
-	@Ignore
 	public void aacWithLcWillPlay() throws Exception
 	{
-		playFor2Seconds(root + "AAC\\03 Down The Nightclub.m4a");
+		playFor2Seconds(resourceToFilePath("/test.aac"));
 	}
 	
 	@Test
@@ -306,11 +310,9 @@ public class Tests
 	}
 
 	@Test
-	@Ignore
 	public void mp3WillPlay() throws Exception
 	{
-		playFor2Seconds(root + "MP3\\id3v2.4 UTF-8 Nanna.mp3");
-
+		playFor2Seconds(resourceToFilePath("/test.mp3"));
 	}
 
 	@Test
@@ -335,14 +337,13 @@ public class Tests
 	}
 	
 	@Test
-	@Ignore
 	public void tracksCanBeChanged() throws Exception
 	{
 		AudioPlayer audioPlayer = new AudioPlayer();
-		audioPlayer.play(root + "WavPack\\8bit.wv");
+		audioPlayer.play(resourceToFilePath("/test.ogg"));
 		Thread.sleep(1000);
 		
-		audioPlayer.play(root + "AAC\\03 Down The Nightclub.m4a");
+		audioPlayer.play(resourceToFilePath("/test.aac"));
 		Thread.sleep(1000);
 		audioPlayer.stop();
 	}
@@ -487,6 +488,38 @@ public class Tests
 	private void playForXSeconds(String path, Track track, int seconds) throws Exception
 	{
 		AudioPlayer audioPlayer = new AudioPlayer();
+		AtomicReference<Exception> playError = new AtomicReference<>();
+		audioPlayer.addHook(new IAudioPlayerHook() {
+
+			@Override
+			public void tagsParsed(int sourceHashCode, AbstractTrack track) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void audioStarting(AudioInfo audio) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void audioInterrupted(IAudio audio) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void audioFailed(IAudio audio, Exception ex) {
+				playError.set(ex);
+			}
+
+			@Override
+			public void audioEnded(IAudio audio) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 		
 		if (track != null)
 			audioPlayer.play(track, false);
@@ -502,6 +535,10 @@ public class Tests
 		}
 		
 		audioPlayer.stopAndWaitUntilPlayerThreadEnds();
+		if (playError.get() != null) {
+			playError.get().printStackTrace();
+		}
+		Assert.assertNull(playError.get());
 	}
 
 	private void write(String msg)

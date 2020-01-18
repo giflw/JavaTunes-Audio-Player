@@ -1,16 +1,13 @@
 package dk.stigc.javatunes.audioplayer.player;
 
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import javax.sound.sampled.LineUnavailableException;
 
-import dk.stigc.javatunes.audioplayer.other.*;
-import dk.stigc.javatunes.audioplayer.streams.CopyInputstream;
-import javaFlacEncoder.FLACEncoder;
-import javaFlacEncoder.FLACFileOutputStream;
-import javaFlacEncoder.StreamConfiguration;
+import dk.stigc.javatunes.audioplayer.other.Common;
+import dk.stigc.javatunes.audioplayer.other.Log;
 
 abstract public class BasePlayer extends Thread
 {	  	

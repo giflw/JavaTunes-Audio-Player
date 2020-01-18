@@ -134,7 +134,7 @@ public class AudioPlayer
 				break;					
 			case aac:
 			case mp4container:
-				player = new AacMp4Player();
+				player = new AacMp4Player(inputStreamSelector.file);
 				break;					
 			case alac:
 				player = new AlacPlayer();

@@ -13,6 +13,7 @@ import dk.stigc.javatunes.audioplayer.tagreader.TagReaderManager;
 public class InputSelector
 {
 	public long contentLength;
+	public File file;
 	public boolean isRemote;
 	
 	public int granules;
@@ -29,6 +30,7 @@ public class InputSelector
 		if (file.exists() == false || file.isDirectory())
 			throw new Exception(file.getAbsolutePath() + " does not exists");
 		
+		this.file = file;
 		contentLength = file.length();
 		
 		if (isOggContainer(audioInfo))

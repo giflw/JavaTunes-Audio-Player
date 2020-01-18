@@ -1,5 +1,7 @@
 # JavaTunes-Audio-Player
-This is the playback and tag parsing code extracted from my very old JavaTunes project (http://stigc.dk/projects/JavaTunes/). Some of the code is from before 2004 (Java 1.4). All playback is native Java code. No libs required.
+
+As written by Stig Christensen (stigc):
+This is the playback and tag parsing code extracted from my (stigc) very old JavaTunes project (http://stigc.dk/projects/JavaTunes/). Some of the code is from before 2004 (Java 1.4). All playback is native Java code. No libs required.
 
 Decoders
 

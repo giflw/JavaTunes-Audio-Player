@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,6 +16,10 @@ import dk.stigc.javatunes.audioplayer.tagreader.TagReaderManager;
 public class TagTests
 {
 	String root = "C:\\data\\Projekter\\Eclipse.workspace\\JavaTunes\\other\\Test audio files\\";
+	
+	public String resourceToFilePath(String resource) throws URISyntaxException {
+		return new File(this.getClass().getResource(resource).toURI()).getAbsolutePath();
+	}
 
 	@Test
 	@Ignore
@@ -56,7 +61,7 @@ public class TagTests
 	@Ignore
 	public void oggVorbisComments() throws Exception
 	{
-		File file = new File(root + "Vorbis\\Abba-Chiquitta.ogg");
+		File file = new File(resourceToFilePath("/test.ogg"));
 		Track track = new TagReaderManager().read(file);
 		assertEquals("Track [artists=Abba, album=Voulez-Vous, title=Chiquitta"
 				+ ", genres=Pop, year=1979, trackNumber=11, codec=vorbis"
@@ -65,23 +70,18 @@ public class TagTests
 	}	
 	
 	@Test
-	@Ignore
 	public void trackNumberTesting() throws Exception
 	{
-		File file = new File("f:\\musik\\blandet 3\\01 - abigail mead, nigel goulding - full metal jacket.mp3");
+		File file = new File(resourceToFilePath("/test.mp3"));
 		Track track = new TagReaderManager().read(file);
-		assertEquals(1, track.trackNumber);
+		assertEquals(5, track.trackNumber);
 	}	
 	
 	@Test
-	@Ignore
 	public void trackNumberTestign2() throws Exception
 	{
-		File file = new File("f:\\musik\\brandi carlile\\the story\\01 - late morning lullaby.mp3");
+		File file = new File(resourceToFilePath("/test.aac"));
 		Track track = new TagReaderManager().read(file);
 		Log.write(""+track.discNumber);
 	}	
-	
-	
-	
 }

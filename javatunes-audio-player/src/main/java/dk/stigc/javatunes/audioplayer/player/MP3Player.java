@@ -92,4 +92,9 @@ public class MP3Player extends BasePlayer
 		}
 		return b;
 	}
+	
+	@Override
+	public void seek(double time) {
+		throw new UnsupportedOperationException();
+	}
 }

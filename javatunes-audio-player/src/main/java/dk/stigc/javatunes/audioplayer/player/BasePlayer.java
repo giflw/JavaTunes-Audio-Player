@@ -21,12 +21,14 @@ abstract public class BasePlayer extends Thread
 
   	private IAudio audio;
 	private int bps, rate, channels;
-	private long totalBytes;
+	private volatile long totalBytes;
 	private boolean bigEndian;
 	private double startGain;
 	private double tagReplayGain = 1;
 	protected long lengthInBytes;
 	private volatile static double globalReplayGain = 1;
+	
+	public abstract void seek(double time);
 		
 	public void initialize(InputStream in, IAudio audio, AudioInfoInternal audioInfo
 			, double startGain, boolean isAlbumMode, long lengthInBytes) throws FileNotFoundException

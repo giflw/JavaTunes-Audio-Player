@@ -4,10 +4,15 @@ import com.beatofthedrum.alacdecoder.*;
 
 public class AlacPlayer extends BasePlayer
 {
+	
+	private volatile AlacContext ac;
+	private volatile int total_samples;
+	
     public void decode() throws Exception
     {
-		AlacContext ac = AlacUtils.AlacOpenFileInput(bin);
+		ac = AlacUtils.AlacOpenFileInput(bin);
 		int total_samples = AlacUtils.AlacGetNumSamples(ac);
+		this.total_samples = total_samples;
 		int sample_rate = AlacUtils.AlacGetSampleRate(ac);
         int num_channels = AlacUtils.AlacGetNumChannels(ac);
 		int bitps = AlacUtils.AlacGetBitsPerSample(ac);
@@ -16,7 +21,7 @@ public class AlacPlayer extends BasePlayer
 			    	
    		int destBufferSize = 1024 *24 * 3; // 24kb buffer = 4096 frames = 1 alac sample (we support max 24bps)
 		byte[] pcmBuffer = new byte[65536];
-		int total_unpacked_bytes = 0;
+//		int total_unpacked_bytes = 0;
 		int bytes_unpacked;
 		
 		int[] pDestBuffer = new int[destBufferSize]; 
@@ -30,7 +35,7 @@ public class AlacPlayer extends BasePlayer
 
 			bytes_unpacked = AlacUtils.AlacUnpackSamples(ac, pDestBuffer);
 
-			total_unpacked_bytes += bytes_unpacked;
+//			total_unpacked_bytes += bytes_unpacked;
 
 			if (bytes_unpacked > 0)
 			{
@@ -90,5 +95,22 @@ public class AlacPlayer extends BasePlayer
 
         return dst;
     }
+
+	@Override
+	public void seek(double time) {
+		AlacContext ac = this.ac;
+		if (ac != null) {
+			int len = audioInfo.getLengthInSeconds();
+			if (len > 0) {
+				int permilcent = (int) Math.round(time * 100 / len);
+				if (permilcent <= 10000 && permilcent >= 0) {
+					int sample = Math.round(this.total_samples * permilcent / 10000);
+					if (sample < total_samples && sample >= 0) {
+						AlacUtils.AlacSetPosition(ac, sample);
+					}
+				}
+			}
+		}
+	}
 
 }

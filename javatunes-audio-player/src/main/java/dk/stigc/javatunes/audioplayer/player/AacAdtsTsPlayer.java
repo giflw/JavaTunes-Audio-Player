@@ -1,9 +1,5 @@
 package dk.stigc.javatunes.audioplayer.player;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import dk.stigc.javatunes.audioplayer.other.Log;
 import dk.stigc.javatunes.audioplayer.streams.TsInputStream;
 import net.sourceforge.jaad.aac.Decoder;
 import net.sourceforge.jaad.aac.SampleBuffer;
@@ -40,5 +36,10 @@ public class AacAdtsTsPlayer extends BasePlayer
 			write(b, b.length);
 		}
     }
+    
+	@Override
+	public void seek(double time) {
+		throw new UnsupportedOperationException();
+	}
 }
 

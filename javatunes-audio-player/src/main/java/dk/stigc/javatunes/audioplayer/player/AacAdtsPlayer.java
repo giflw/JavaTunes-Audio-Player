@@ -35,4 +35,9 @@ public class AacAdtsPlayer extends BasePlayer
 			write(b, b.length);
 		}
     }
+
+	@Override
+	public void seek(double time) {
+		throw new UnsupportedOperationException();
+	}
 }

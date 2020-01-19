@@ -2,8 +2,6 @@ package dk.stigc.javatunes.audioplayer.player;
 
 import java.io.*;
 
-import javax.sound.sampled.LineUnavailableException;
-
 import org.kc7bfi.jflac.*;
 import org.kc7bfi.jflac.metadata.StreamInfo;
 import org.kc7bfi.jflac.util.ByteData;
@@ -98,4 +96,9 @@ public class FLACPlayer extends BasePlayer implements PCMProcessor
     		
         write(data, length);
     }
+    
+	@Override
+	public void seek(double time) {
+		throw new UnsupportedOperationException();
+	}
 }

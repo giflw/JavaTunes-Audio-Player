@@ -79,6 +79,10 @@ public class AudioInfoInternal
 		return false;
 	}
 	
+	public int getLengthInSeconds() {
+		return lengthInSeconds;
+	}
+	
 	private int getVariableKbps()
 	{
 		if (bitrateCount<1)

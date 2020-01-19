@@ -283,4 +283,9 @@ public class OggPlayer extends BasePlayer
 
     oy.clear();
   }
+  
+	@Override
+	public void seek(double time) {
+		throw new UnsupportedOperationException();
+	}
 }

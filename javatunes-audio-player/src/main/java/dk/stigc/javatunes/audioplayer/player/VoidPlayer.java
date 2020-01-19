@@ -10,4 +10,8 @@ public class VoidPlayer extends BasePlayer
 	public void decode()
     {
     }
+
+	@Override
+	public void seek(double time) {
+	}
 }

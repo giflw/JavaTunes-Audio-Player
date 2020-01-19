@@ -187,5 +187,10 @@ public class WavPackPlayer extends BasePlayer
         }
 
         return dst;
-    }	
+    }
+
+	@Override
+	public void seek(double time) {
+		throw new UnsupportedOperationException();
+	}	
 }

@@ -59,4 +59,9 @@ public class OpusPlayer extends BasePlayer
 			ad = of.getNextAudioPacket();
 		}
 	}
+	
+	@Override
+	public void seek(double time) {
+		throw new UnsupportedOperationException();
+	}	
 }

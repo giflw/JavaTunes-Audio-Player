@@ -16,7 +16,8 @@ import net.sourceforge.jaad.mp4.api.Track;
 public class AacMp4Player extends BasePlayer
 {
 	
-	private File file;
+	private final File file;
+	private volatile Track currentTrack;
 
 	public AacMp4Player(File file) {
 		this.file = file;
@@ -32,7 +33,7 @@ public class AacMp4Player extends BasePlayer
 		final Movie movie = cont.getMovie();
 		final List<Track> tracks = movie.getTracks(AudioTrack.AudioCodec.AAC);
 		if(tracks.isEmpty()) throw new Exception("movie does not contain any AAC track");
-		final AudioTrack track = (AudioTrack) tracks.get(0);
+		final AudioTrack track = (AudioTrack) tracks.get(0);		this.currentTrack = track;
 		final SampleBuffer buf = new SampleBuffer();
 		buf.setBigEndian(false);
 		
@@ -60,4 +61,11 @@ public class AacMp4Player extends BasePlayer
 			write(b, b.length);
 		}
     }
+
+	public void seek(double time) {
+		Track track = currentTrack;
+		if (track != null) {
+			track.seek(time);
+		}
+	}
 }

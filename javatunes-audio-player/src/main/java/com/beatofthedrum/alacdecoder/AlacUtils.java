@@ -198,16 +198,16 @@ public class AlacUtils
 		/* calculate output size */
 		int num_samples = 0;
 		int thissample_duration;
-		int thissample_bytesize = 0;
+//		int thissample_bytesize = 0;
 		SampleDuration sampleinfo = new SampleDuration();
 		int i;
-		boolean error_found = false;
+//		boolean error_found = false;
 		int retval = 0;
 			
 		for (i = 0; i < ac.demux_res.sample_byte_size.length; i++)
 		{
 			thissample_duration = 0;
-			thissample_bytesize = 0;
+//			thissample_bytesize = 0;
 
 			retval = get_sample_info(ac.demux_res, i, sampleinfo);
 			
@@ -216,7 +216,7 @@ public class AlacUtils
 				return (-1);
 			}
 			thissample_duration = sampleinfo.sample_duration;
-			thissample_bytesize = sampleinfo.sample_byte_size;
+//			thissample_bytesize = sampleinfo.sample_byte_size;
 
 			num_samples += thissample_duration;
 		}

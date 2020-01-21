@@ -7,7 +7,7 @@ public abstract class AbstractTrack
 	public StringList artists = new StringList();
 	public StringList genres = new StringList();
 
-	public Codec codec;
+	public Codec codec = Codec.unknown;
 	public boolean embededCover;
 	public static double REPLAY_GAIN_NOT_SET = Double.MIN_VALUE;
 	public double replaygain = REPLAY_GAIN_NOT_SET;
@@ -20,16 +20,23 @@ public abstract class AbstractTrack
 		return "" + year;
 	}
 
-	public String getGenre()
+	public String getFormatedTrackNumber()
 	{
-		return genres.toString(" / ");
-	}
-	
-	public String getArtist()
-	{
-		return artists.toString(" / ");
+		if (trackNumber == 0)
+			return "";
+		else if (trackNumber < 10)
+			return "0" + trackNumber;
+		else
+			return "" + trackNumber;
 	}
 
+	public String getAlbumFormated()
+	{
+		if (discNumber > 1)
+			return album + " (DISC " + discNumber + ")";
+		return album;
+	}
+	
 	public void copyFrom(AbstractTrack that)
 	{
 		this.artists = new StringList(that.artists);
@@ -62,6 +69,63 @@ public abstract class AbstractTrack
 		codec = null;
 	}	
   	
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("AbstractTrack [year=");
+		builder.append(year);
+		builder.append(", trackNumber=");
+		builder.append(trackNumber);
+		builder.append(", discNumber=");
+		builder.append(discNumber);
+		builder.append(", ");
+		if (title != null)
+		{
+			builder.append("title=");
+			builder.append(title);
+			builder.append(", ");
+		}
+		if (album != null)
+		{
+			builder.append("album=");
+			builder.append(album);
+			builder.append(", ");
+		}
+		if (lyrics != null)
+		{
+			builder.append("lyrics=");
+			builder.append(lyrics);
+			builder.append(", ");
+		}
+		if (artists != null)
+		{
+			builder.append("artists=");
+			builder.append(artists);
+			builder.append(", ");
+		}
+		if (genres != null)
+		{
+			builder.append("genres=");
+			builder.append(genres);
+			builder.append(", ");
+		}
+		if (codec != null)
+		{
+			builder.append("codec=");
+			builder.append(codec);
+			builder.append(", ");
+		}
+		builder.append("embededCover=");
+		builder.append(embededCover);
+		builder.append(", replaygain=");
+		builder.append(replaygain);
+		builder.append(", replaygainAlbumMode=");
+		builder.append(replaygainAlbumMode);
+		builder.append("]");
+		return builder.toString();
+	}
+
 	public boolean hasReplayGain()
   	{
   		return replaygain!=REPLAY_GAIN_NOT_SET || replaygainAlbumMode!=REPLAY_GAIN_NOT_SET;

@@ -14,14 +14,11 @@ public class FLACPlayer extends BasePlayer implements PCMProcessor
 {
 	Exception ex;
 	
-    private void calculatePlayLength(StreamInfo si)
+    private int calculatePlayLength(StreamInfo si)
     {
     	int samplerate = si.getSampleRate();
     	long samples = si.getTotalSamples();
-    	synchronized(audioInfo)
-    	{
-    		audioInfo.lengthInSeconds = (int)(samples/samplerate);
-    	}
+    	return (int)(samples/samplerate);
     }
 	
     public void decode() throws Exception
@@ -29,14 +26,12 @@ public class FLACPlayer extends BasePlayer implements PCMProcessor
 		FLACDecoder decoder = new FLACDecoder(bin);
 		decoder.addPCMProcessor(this);
 		decoder.readMetadata();
-		calculatePlayLength(decoder.getStreamInfo());
-		setBitRateFromFileLength();
+
+		int lengthInSeconds = calculatePlayLength(decoder.getStreamInfo());
+		audioInfo.setLengthInSeconds(lengthInSeconds);
 		
-		while (true)
+		while (running)
 		{
-			if (!running) 
-				return;
-			
 			if (ex != null)
 				throw ex;
 			
@@ -61,13 +56,11 @@ public class FLACPlayer extends BasePlayer implements PCMProcessor
     private int bitsPerSample;
  	public void processStreamInfo(StreamInfo si)
  	{
-		//	if (si.getBitsPerSample()!=16)
-		//		throw new RuntimeException("Bits depth not supported:" + si.getBitsPerSample());
-		//Log.write("getBitsPerSample : " + si.getBitsPerSample());
-		//Log.write("si.getChannels() : " + si.getChannels());
-		//Log.write("si.getSampleRate() : " + si.getSampleRate());
+ 		if (si.getSampleRate()<=0)
+ 			return;
 		this.bitsPerSample = si.getBitsPerSample();
 		int bitsPerSample = this.bitsPerSample==24 ? 16 : this.bitsPerSample;
+		
 		try
 		{
 			initAudioLine(si.getChannels(), si.getSampleRate(), bitsPerSample, true, false);

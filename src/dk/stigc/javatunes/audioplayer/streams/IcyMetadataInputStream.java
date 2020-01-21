@@ -2,20 +2,21 @@ package dk.stigc.javatunes.audioplayer.streams;
 
 import java.io.*;
 
+import dk.stigc.common.StringFunc3;
 import dk.stigc.javatunes.audioplayer.other.*;
-import dk.stigc.javatunes.audioplayer.player.AudioInfo;
+import dk.stigc.javatunes.audioplayer.player.AudioInfoInternal;
 
 //http://jicyshout.sourceforge.net/oreilly-article/java-streaming-mp3-pt2/java-streaming-mp3-pt2.html
 //http://sphere.sourceforge.net/flik/docs/streaming.html
 //http://www.smackfu.com/stuff/programming/shoutcast.html
 public class IcyMetadataInputStream extends InputStream
 {
-	private AudioInfo audioInfo;
+	private AudioInfoInternal audioInfo;
 	private int metaInt = -1;
 	private int bytesUntilNextMetadata = -1;
 	InputStream is;
 	
-	public IcyMetadataInputStream(InputStream is, AudioInfo audioInfo, int metaInt)
+	public IcyMetadataInputStream(InputStream is, AudioInfoInternal audioInfo, int metaInt)
 	{
 		this.is = is;
 		this.audioInfo = audioInfo;
@@ -26,13 +27,13 @@ public class IcyMetadataInputStream extends InputStream
 	private String parseIcyStreamTitle(String v)
 	{
 		v = v.trim();
-		if (StringFunc.startsWithIgnoreCase(v, "streamtitle='"))
+		if (StringFunc3.startsWithIgnoreCase(v, "streamtitle='"))
 		{
 			v = v.substring(13).trim();
 			int end = v.indexOf("';");
 			if (end>-1)
 				v = v.substring(0, end);
-			if (StringFunc.startsWithIgnoreCase(v, "Senest spillet:"))
+			if (StringFunc3.startsWithIgnoreCase(v, "Senest spillet:"))
 				v = v.substring(15).trim();
 		}
 		
@@ -62,7 +63,7 @@ public class IcyMetadataInputStream extends InputStream
 
 	public void trySetNowPlaying(String nowPlaying)
 	{
-		if (StringFunc.isNullOrEmpty(nowPlaying))
+		if (StringFunc3.isNullOrEmpty(nowPlaying))
 			return;
 		
 		nowPlaying = nowPlaying.trim();
@@ -70,10 +71,7 @@ public class IcyMetadataInputStream extends InputStream
 		//Sometimes it is only a "-"
 		if (nowPlaying.length()>1)
 		{
-			synchronized(audioInfo)
-			{
-				audioInfo.icyNowPlaying = nowPlaying;
-			}
+			audioInfo.setIcyTitle(nowPlaying);
 		}
 	}
 	

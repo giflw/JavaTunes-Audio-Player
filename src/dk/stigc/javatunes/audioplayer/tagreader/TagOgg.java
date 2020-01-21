@@ -1,5 +1,6 @@
 package dk.stigc.javatunes.audioplayer.tagreader;
 
+import dk.stigc.common.StringFunc3;
 import dk.stigc.javatunes.audioplayer.other.*;
 
 import java.io.*; 
@@ -101,13 +102,25 @@ public class TagOgg extends TagBase
 		readAndParse(data, fb);
 	}
 	
+	private boolean isOpusTag(byte[] commentsData)
+	{
+		//4F7075 73546167 73
+		return commentsData[0] == 0x4f
+				&& commentsData[1] == 0x70
+				&& commentsData[2] == 0x75
+				&& commentsData[3] == 0x73
+				&& commentsData[4] == 0x54
+				&& commentsData[5] == 0x61
+				&& commentsData[6] == 0x67
+				&& commentsData[7] == 0x73;
+	}
 	private void readAndParse(byte[] data, FileBuffer fb) throws Exception
 	{
 		//Reads first page
 		ensureCommentsData(data, fb, 1);
 		
 		//Read comment header
-		int index = 7; //skip .vorbis
+		int index = isOpusTag(commentsData) ? 8 : 7; //skip .vorbis
 		index += (int)toulong(read32(commentsData, index)); //skip Vendor_string
 		index+=4;
 		int comments = (int)toulong(read32(commentsData, index));
@@ -138,7 +151,7 @@ public class TagOgg extends TagBase
 			
 		for (int i=0; i<tags.length; i++)
 		{
-			if (StringFunc.startsWithIgnoreCase(tag, tags[i]))
+			if (StringFunc3.startsWithIgnoreCase(tag, tags[i]))
 			{
 				boolean parseValue = !isCovertag(i) || (isCovertag(i) && decodeImage);
 				//Log.write("tag:" +tag);

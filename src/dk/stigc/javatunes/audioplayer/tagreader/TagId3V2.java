@@ -1,5 +1,6 @@
 package dk.stigc.javatunes.audioplayer.tagreader;
 
+import dk.stigc.common.StringFunc3;
 import dk.stigc.javatunes.audioplayer.other.*;
 import java.util.*; 
 
@@ -368,11 +369,11 @@ public class TagId3V2  extends TagBase
 										String identifier = values.get(0);
 										String value = values.get(1);
 										//Log.write(identifier + ";" + value);
-										if (StringFunc.startsWithIgnoreCase(identifier, "replaygain_track_gain"))
+										if (StringFunc3.startsWithIgnoreCase(identifier, "replaygain_track_gain"))
 											replaygain = getRG(value,0);
-										else if (StringFunc.startsWithIgnoreCase(identifier, "replaygain_album_gain"))
+										else if (StringFunc3.startsWithIgnoreCase(identifier, "replaygain_album_gain"))
 											replaygainAlbumMode = getRG(value,0);
-										else if (StringFunc.startsWithIgnoreCase(identifier, "lyrics"))
+										else if (StringFunc3.startsWithIgnoreCase(identifier, "lyrics"))
 											lyrics = value;
 
 									}
@@ -406,7 +407,6 @@ public class TagId3V2  extends TagBase
 		picindex = nextNull + 1;									
 		
 		int picsize = size-(picindex-index);
-		Log.write("picsize:" +picsize);
 		imgData = new byte[picsize];
 		//arraycopy(Object src, int srcPos, Object dest, int destPos, int length) 
 		System.arraycopy(v, picindex, imgData, 0, picsize);		

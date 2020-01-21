@@ -30,20 +30,19 @@ public class OggPlayer extends BasePlayer
   byte[] buffer=null;
   int bytes=0;
   int counter=0;
-  
+  int granules;
 
 	
 
   //int frameSizeInBytes;
   //int bufferLengthInBytes;
 
-/*
-  public OggPlayer(String fileName)
+
+  public OggPlayer(int granules)
   {
-  	this.fileName = fileName;
-  	setPriority(MAX_PRIORITY);
+	  this.granules = granules;
   }
-  */
+  
   
   void init_jorbis()
   {
@@ -60,78 +59,6 @@ public class OggPlayer extends BasePlayer
     
     oy.init();
   }
-
-/*
-  void createOutputLine(int channels, int rate)
-  {
-    if(outputLine==null || this.rate!=rate || this.channels!=channels)
-    {
-      //Drain last....
-      //if(outputLine!=null)
-      //{
-        //outputLine.drain();
-        //outputLine.stop();
-        //outputLine.close();
-      //}
-
-      //Log.write ("rate:" + rate);
-      //Log.write ("channels:" + channels);
-      Log.write ("New Vorbis Line");
-      init_audio(channels, rate);
-      outputLine.start();
-    }
-    else
-    {
-	    outputLine.stop();
-	    outputLine.start();
-	}
-  }
-
-  void init_audio(int channels, int rate)
-  {
-    try 
-    {
-      AudioFormat af = new AudioFormat((float)rate, 16, channels,true,false);
-      DataLine.Info info = 	new DataLine.Info(SourceDataLine.class, af); //AudioSystem.NOT_SPECIFIED
-      if (!AudioSystem.isLineSupported(info))
-    	return;
-
-      try
-      {
-      	int bufferSize = Settings.getPropertyAsInt("SoundBuffer", 0);
-    	outputLine = (SourceDataLine) AudioSystem.getLine(info);
-    	if (bufferSize>0)
-    		outputLine.open(af, bufferSize);
-    	else
-    		outputLine.open(af);
-    	Log.write("Vorbis Buffer: " + outputLine.getBufferSize());
-    	
-      } 
-      catch (LineUnavailableException ex) { 
-    System.out.println("init_audio " + ex);
-        return;
-      } 
-      catch (IllegalArgumentException ex) { 
-    System.out.println("init_audio: " + ex);
-    return;
-      }
-
-      //frameSizeInBytes = audioFormat.getFrameSize();
-      //int bufferLengthInFrames = outputLine.getBufferSize()/frameSizeInBytes/2;
-      //bufferLengthInBytes = bufferLengthInFrames * frameSizeInBytes;
-
-      //buffer = new byte[bufferLengthInBytes];
-      //if(originalClassLoader!=null)
-      //  Thread.currentThread().setContextClassLoader(originalClassLoader);
-
-      this.rate=rate;
-      this.channels=channels;
-    }
-    catch(Exception ee){
-      System.out.println(ee);
-    }
-  }
-*/
 
   public void decode() throws Exception
   	{
@@ -231,23 +158,17 @@ public class OggPlayer extends BasePlayer
       float[][][] _pcmf=new float[1][][];
       int[] _index=new int[vi.channels];
 
-      synchronized (audioInfo)
-      {
-    	  if (audioInfo.granules > 0) 
-    		  audioInfo.lengthInSeconds = audioInfo.granules / vi.rate;
-    	  else if (audioInfo.contenLength > 0)
-    		  audioInfo.lengthInSeconds = (int)(audioInfo.contenLength * 8 / vi.bitrate_nominal);
-    	  
-    	  setBitRateFromFileLength();
-    	  audioInfo.kbps = vi.bitrate_nominal/1000;
-      }
-	
-	//Log.write("3");
-		//cb.sendMessage(null, "UpdateSongInfo");
-      	//createOutputLine(vi.channels, vi.rate);
-//      	Log.write ("
-      	initAudioLine(vi.channels, vi.rate, 16, true, false);
-      	
+	  int lengthInSeconds = 0;
+	  if (granules > 0) 
+		  lengthInSeconds = granules / vi.rate;
+	  else if (lengthInBytes > 0)
+		  lengthInSeconds = (int)(lengthInBytes * 8 / vi.bitrate_nominal);
+	  
+	  if (audioInfo.setLengthInSeconds(lengthInSeconds) == false)
+		  audioInfo.setKbps(vi.bitrate_nominal/1000);
+
+	  initAudioLine(vi.channels, vi.rate, 16, true, false);
+      	    
       	//setVolume(gain);
       	//timer = System.currentTimeMillis();
   		//Log.write ("available: " + outputLine.available());
